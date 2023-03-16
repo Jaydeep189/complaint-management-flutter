@@ -1,8 +1,5 @@
 import 'dart:io';
-
 import 'package:complaint_management_system/layout/bottom_navigation.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import '../layout/bottom_navigation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../util/dropdown_search.dart';
@@ -25,6 +22,46 @@ class _NewComplaintState extends State<NewComplaint> {
     'Item7',
     'Item8',
   ];
+  String problemid = '';
+  String wardid = '';
+  String departmentid = '';
+  String area = '';
+  String nameid = '';
+  String description = '';
+  String email = '';
+  String address = '';
+  String contactPhone = '';
+  String contactName = '';
+  String tenantNo = '';
+  String imageUrl = '';
+
+  void FilePicking() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      print(file);
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void SubmitForm() {
+    print({
+      problemid,
+      wardid,
+      departmentid,
+      area,
+      nameid,
+      description,
+      email,
+      address,
+      contactPhone,
+      contactName,
+      tenantNo,
+      imageUrl
+    });
+  }
+
   String? selectedValue;
   @override
   Widget build(BuildContext context) {
@@ -54,12 +91,15 @@ class _NewComplaintState extends State<NewComplaint> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "NEW COMPLANITS",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
+                const Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: const Text(
+                    "NEW COMPLANITS",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SingleChildScrollView(
                   reverse: true,
@@ -78,6 +118,10 @@ class _NewComplaintState extends State<NewComplaint> {
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: DropDownSearch(
                                     items: ["Item1", "Item2", "Item3", "Item4"],
+                                    stateVar: problemid,
+                                    changeFunction: (value) => setState(() {
+                                      problemid = value;
+                                    }),
                                     lableText: "Select A Problem",
                                   ),
                                 ),
@@ -85,8 +129,12 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: DropDownSearch(
+                                    stateVar: wardid,
                                     items: ["Item1", "Item2", "Item3", "Item4"],
                                     lableText: "Select A Ward",
+                                    changeFunction: (value) => setState(() {
+                                      wardid = value;
+                                    }),
                                   ),
                                 ),
                                 Padding(
@@ -94,6 +142,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
                                     enabled: false,
+                                    onChanged: (value) => setState(() {
+                                      departmentid = value;
+                                    }),
                                     decoration: const InputDecoration(
                                       labelText: 'Department',
                                     ),
@@ -103,8 +154,12 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: DropDownSearch(
+                                    stateVar: area,
                                     items: ["Item1", "Item2", "Item3", "Item4"],
                                     lableText: "Select A Area",
+                                    changeFunction: (value) => setState(() {
+                                      area = value;
+                                    }),
                                   ),
                                 ),
                                 Padding(
@@ -113,6 +168,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                   child: TextField(
                                     maxLines: 4,
                                     keyboardType: TextInputType.multiline,
+                                    onChanged: (value) => setState(() {
+                                      description = value;
+                                    }),
                                     decoration: const InputDecoration(
                                       labelText: 'Description',
                                     ),
@@ -122,6 +180,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
+                                    onChanged: (value) => setState(() {
+                                      nameid = value;
+                                    }),
                                     decoration: const InputDecoration(
                                       labelText: 'Name',
                                     ),
@@ -132,6 +193,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
                                     keyboardType: TextInputType.emailAddress,
+                                    onChanged: (value) => setState(() {
+                                      email = value;
+                                    }),
                                     decoration: const InputDecoration(
                                       labelText: 'Email',
                                     ),
@@ -142,6 +206,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
                                     maxLines: 4,
+                                    onChanged: (value) => setState(() {
+                                      address = value;
+                                    }),
                                     keyboardType: TextInputType.multiline,
                                     decoration: const InputDecoration(
                                       labelText: 'Residential Address',
@@ -152,6 +219,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
+                                    onChanged: (value) => setState(() {
+                                      contactPhone = value;
+                                    }),
                                     decoration: const InputDecoration(
                                       labelText: 'Contact Person Name',
                                     ),
@@ -162,6 +232,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
                                     keyboardType: TextInputType.phone,
+                                    onChanged: (value) => setState(() {
+                                      contactName = value;
+                                    }),
                                     decoration: const InputDecoration(
                                       labelText: 'Contact Person Number',
                                     ),
@@ -171,9 +244,48 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: TextField(
+                                    onChanged: (value) => setState(() {
+                                      tenantNo = value;
+                                    }),
                                     keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
                                       labelText: 'Tenent Number',
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, bottom: 20),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: OutlinedButton(
+                                        onPressed: FilePicking,
+                                        child: const Text("Upload Image"),
+                                        style: OutlinedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 50, vertical: 15),
+                                          primary: Colors.blue,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                      ),
+                                    )),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 4, bottom: 4),
+                                  child: ElevatedButton(
+                                    onPressed: SubmitForm,
+                                    child: Text("Submit Complaint"),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 100, vertical: 15),
+                                      primary: Colors.green,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
                                     ),
                                   ),
                                 ),

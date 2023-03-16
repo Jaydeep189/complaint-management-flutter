@@ -6,7 +6,14 @@ import 'package:flutter/material.dart';
 class DropDownSearch extends StatefulWidget {
   List<String> items = [];
   String lableText = "";
-  DropDownSearch({super.key, required this.items, required this.lableText});
+  String stateVar = "";
+  final Function(String val) changeFunction;
+  DropDownSearch(
+      {super.key,
+      required this.items,
+      required this.lableText,
+      required this.stateVar,
+      required this.changeFunction});
 
   @override
   State<DropDownSearch> createState() => _DropDownSearchState();
@@ -17,6 +24,8 @@ class _DropDownSearchState extends State<DropDownSearch> {
   Widget build(BuildContext context) {
     return DropdownSearch<String>(
       items: widget.items,
+      selectedItem: widget.stateVar,
+      onChanged: (value) => widget.changeFunction(value!),
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(labelText: widget.lableText),
       ),

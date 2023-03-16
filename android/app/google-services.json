@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "62969576181",
+    "project_id": "scenic-firefly-376309",
+    "storage_bucket": "scenic-firefly-376309.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62969576181:android:95e362d9f49972fd6f23bc",
+        "android_client_info": {
+          "package_name": "com.example.complaint_management_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62969576181-vucq3iv7shn2cn06mr79lcbbkfvporsr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4TNhNaJtiSWcrCT6UF2MBGL3nrt45mQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62969576181-f9l6hjinei0eulmloleamgd3vgi1ucda.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

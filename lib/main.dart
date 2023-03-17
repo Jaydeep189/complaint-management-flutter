@@ -31,14 +31,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String uid = '';
   final GetUid controller = Get.find<GetUid>();
+  bool is_user = true;
   @override
   Widget build(BuildContext context) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      setState(() {
-        if (user != null) {
-          controller.storeUid(user.uid);
-        }
-      });
+      if (user != null) {
+        controller.storeUid(user.uid);
+        // print(controller.uid.value);
+        setState(() {
+          is_user = true;
+        });
+      } else {
+        is_user = false;
+        print(user);
+      }
     });
     final routes = [
       GetPage(name: '/pending-complaints', page: () => PendingComplaint()),
@@ -47,9 +53,7 @@ class _MyAppState extends State<MyApp> {
     ];
     return GetMaterialApp(
       title: 'AMC Complaint Management System',
-      initialRoute: controller.uid.value == ''
-          ? '/new-complaints'
-          : '/pending-complaints',
+      initialRoute: '/pending-complaints',
       getPages: routes,
     );
   }

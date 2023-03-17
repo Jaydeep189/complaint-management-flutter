@@ -11,6 +11,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../firebase_options.dart';
 import 'package:flutter/material.dart';
 
+import '../global_state/state.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -23,10 +25,11 @@ class _LoginState extends State<Login> {
 
   String verify = "";
   bool _isloding = false;
+
   @override
   Widget build(BuildContext context) {
     // dart simple function code
-
+    final GetUid controller = Get.find<GetUid>();
     String phone = '';
     String smsCode = '';
     PhoneLogin(number) async {
@@ -55,27 +58,15 @@ class _LoginState extends State<Login> {
 
     VerifyOTP(otp) async {
       // Create a PhoneAuthCredential with the code
-      setState(() {
-        _isloding = true;
-      });
       PhoneAuthCredential credential =
           PhoneAuthProvider.credential(verificationId: verify, smsCode: otp);
-      FirebaseAuth.instance.authStateChanges().listen((User? user) {
-        if (user != null) {
-          Get.to(PendingComplaint());
-        }
-      });
-      setState(() {
-        _isloding = false;
-      });
+      print(credential.token);
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      controller.storeUid(FirebaseAuth.instance.currentUser!.uid);
+      Get.to(() => PendingComplaint());
       // Sign the user in (or link) with the credential
     }
 
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        Get.to(PendingComplaint());
-      }
-    });
     return Scaffold(
       body: Container(
         color: Colors.white,

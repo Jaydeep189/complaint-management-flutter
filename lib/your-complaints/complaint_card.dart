@@ -1,11 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ComplaintCard extends StatelessWidget {
   const ComplaintCard({
     Key? key,
     String? this.phone,
+    String? this.ticketNo,
+    String? this.department,
+    String? this.ward,
+    Timestamp? this.date,
+    String? this.status,
+    String? this.description,
+    String? this.problem,
+    String? this.name,
+    String? this.email,
   }) : super(key: key);
   final phone;
+  final ticketNo;
+  final department;
+  final ward;
+  final date;
+  final status;
+  final name;
+  final email;
+  final problem;
+  final description;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +57,7 @@ class ComplaintCard extends StatelessWidget {
                           Expanded(
                             flex: 4,
                             child: Text(
-                              "Kankaria Lakefront - Level of Housekeeping – Cleanliness Is Not Up To The Mark - KLF",
+                              problem,
                               softWrap: true,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
@@ -55,7 +74,7 @@ class ComplaintCard extends StatelessWidget {
                           Expanded(
                             flex: 4,
                             child: Text(
-                              "Kankaria Lakefront - Level of Housekeeping – Cleanliness Is Not Up To The Mark - KLF",
+                              description,
                               softWrap: true,
                             ),
                           ),
@@ -97,7 +116,7 @@ class ComplaintCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "Kankaria Lakefront",
+                                department,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -113,7 +132,7 @@ class ComplaintCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "karnavati",
+                                ward,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -129,7 +148,7 @@ class ComplaintCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "Mon Feb 13 2023",
+                                date.toDate().toString(),
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -145,7 +164,7 @@ class ComplaintCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "Jaydeep Sharma",
+                                name,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -177,7 +196,7 @@ class ComplaintCard extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "whywhathowblog1@gmail.com",
+                                email,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),

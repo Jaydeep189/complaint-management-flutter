@@ -1,4 +1,6 @@
 import 'package:complaint_management_system/auth/login.dart';
+import 'package:complaint_management_system/views/new_complaints.dart';
+import 'package:complaint_management_system/views/pending_complaints.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -21,11 +23,14 @@ class BottomNavigation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(
-              Icons.home,
-              size: 30,
+            MaterialButton(
+              onPressed: () => Get.to(() => PendingComplaint()),
+              child: Icon(Icons.home, size: 30),
             ),
-            Icon(Icons.search, size: 30),
+            MaterialButton(
+              onPressed: () => Get.to(() => NewComplaint()),
+              child: Icon(Icons.search, size: 30),
+            ),
             Icon(Icons.add, size: 30),
             Icon(Icons.favorite, size: 30),
             // button in flutter

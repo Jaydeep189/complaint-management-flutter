@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:complaint_management_system/layout/bottom_navigation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+import 'package:get/get.dart';
 import '../util/dropdown_search.dart';
 
 class NewComplaint extends StatefulWidget {
@@ -12,6 +15,11 @@ class NewComplaint extends StatefulWidget {
 }
 
 class _NewComplaintState extends State<NewComplaint> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference problem =
+      FirebaseFirestore.instance.collection('Problems');
+  CollectionReference ward = FirebaseFirestore.instance.collection('Ward');
+
   final List<String> items = [
     'Item1',
     'Item2',
@@ -63,6 +71,36 @@ class _NewComplaintState extends State<NewComplaint> {
   }
 
   String? selectedValue;
+  List problems = [];
+  List wardData = [];
+
+  Future<void> getProblems() async {
+    await problem.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          problems.add(doc.data());
+        });
+      });
+    });
+  }
+
+  Future<void> getWard() async {
+    await ward.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        setState(() {
+          wardData.add(doc.data());
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProblems();
+    getWard();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +131,7 @@ class _NewComplaintState extends State<NewComplaint> {
               children: [
                 const Padding(
                   padding: const EdgeInsets.only(top: 20.0),
-                  child: const Text(
+                  child: Text(
                     "NEW COMPLANITS",
                     style: TextStyle(
                         color: Colors.black,
@@ -117,11 +155,30 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: DropDownSearch(
-                                    items: ["Item1", "Item2", "Item3", "Item4"],
-                                    stateVar: problemid,
-                                    changeFunction: (value) => setState(() {
-                                      problemid = value;
-                                    }),
+                                    items: problems
+                                        .map((e) => e['statement'].toString())
+                                        .toList(),
+                                    changeFunction: (value) => () {
+                                      print(value);
+                                      FirebaseFirestore.instance
+                                          .collection('Problem')
+                                          .where('statement', isEqualTo: value)
+                                          .get()
+                                          .then((value) {
+                                        value.docs.forEach((element) {
+                                          element.data();
+                                          setState(() {
+                                            dynamic data = element.data();
+                                            setState(() {
+                                              problemid = data['id'];
+                                              departmentid = data['department'];
+                                            });
+                                            print(problemid);
+                                            print(departmentid);
+                                          });
+                                        });
+                                      });
+                                    },
                                     lableText: "Select A Problem",
                                   ),
                                 ),
@@ -129,12 +186,18 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: DropDownSearch(
-                                    stateVar: wardid,
-                                    items: ["Item1", "Item2", "Item3", "Item4"],
+                                    items: wardData
+                                        .map((e) => e['name'].toString())
+                                        .toList(),
                                     lableText: "Select A Ward",
-                                    changeFunction: (value) => setState(() {
-                                      wardid = value;
-                                    }),
+                                    changeFunction: (value) => () {
+                                      FirebaseFirestore.instance
+                                          .collection('Ward')
+                                          .where("name", isEqualTo: value)
+                                          .get()
+                                          .then(
+                                              (value) => log(value.toString()));
+                                    },
                                   ),
                                 ),
                                 Padding(
@@ -145,6 +208,10 @@ class _NewComplaintState extends State<NewComplaint> {
                                     onChanged: (value) => setState(() {
                                       departmentid = value;
                                     }),
+                                    controller: departmentid == ''
+                                        ? null
+                                        : TextEditingController(
+                                            text: departmentid),
                                     decoration: const InputDecoration(
                                       labelText: 'Department',
                                     ),
@@ -154,8 +221,9 @@ class _NewComplaintState extends State<NewComplaint> {
                                   padding:
                                       const EdgeInsets.only(top: 4, bottom: 4),
                                   child: DropDownSearch(
-                                    stateVar: area,
-                                    items: ["Item1", "Item2", "Item3", "Item4"],
+                                    items: wardData
+                                        .map((e) => e['name'].toString())
+                                        .toList(),
                                     lableText: "Select A Area",
                                     changeFunction: (value) => setState(() {
                                       area = value;

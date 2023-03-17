@@ -1,15 +1,39 @@
+import 'dart:math';
+
 import 'package:complaint_management_system/layout/bottom_navigation.dart';
 import 'package:complaint_management_system/your-complaints/complaint_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PendingComplaint extends StatefulWidget {
   const PendingComplaint({Key? key}) : super(key: key);
-
   @override
   State<PendingComplaint> createState() => _PendingComplaintState();
 }
 
 class _PendingComplaintState extends State<PendingComplaint> {
+  Query pendingComplaints = FirebaseFirestore.instance
+      .collection('Complaint-Registration')
+      .where('status', isEqualTo: 'PENDING');
+
+  @override
+  void initState() {
+    super.initState();
+    getPendingComplaints();
+  }
+
+  Future<void> getPendingComplaints() async {
+    await pendingComplaints.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        print(doc.data());
+        setState(() {
+          pending_complaints.add(doc.data());
+        });
+      });
+    });
+  }
+
+  List pending_complaints = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,23 +67,22 @@ class _PendingComplaintState extends State<PendingComplaint> {
                       fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
-                const ComplaintCard(
-                  phone: "3124342332324",
-                ),
-                const ComplaintCard(
-                  phone: "3124342332324",
-                ),
-                const ComplaintCard(
-                  phone: "3124342332324",
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    onChanged: (text) {},
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Phone Number',
-                    ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: pending_complaints
+                        .map((c) => ComplaintCard(
+                              phone: c['phone'],
+                              name: c['name'],
+                              ticketNo: c['docId'],
+                              ward: c['wardName'],
+                              status: c['status'],
+                              problem: c['problemName'],
+                              description: c['desc'],
+                              date: c['date'],
+                              department: c['departmentName'],
+                              email: c['email'],
+                            ))
+                        .toList(),
                   ),
                 ),
               ],
